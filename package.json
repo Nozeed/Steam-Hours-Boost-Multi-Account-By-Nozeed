@@ -1,5 +1,5 @@
 ﻿{
-  "name": "steam-hoursboost-beer",
+  "name": "steam-hoursboost-nozeed",
   "version": "1.0.0",
   "private": true,
   "description": "Steam hours booster with staggered logins and Steam Guard prompt support",
@@ -12,3 +12,4 @@
     "steam-user": "^5.2.0"
   }
 }
+
