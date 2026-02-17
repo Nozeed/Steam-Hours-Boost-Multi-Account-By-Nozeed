@@ -24,9 +24,14 @@
     curl -sL [https://rpm.nodesource.com/setup_20.x](https://rpm.nodesource.com/setup_20.x) | sudo bash -
     sudo dnf install -y nodejs
     ```
-
-### 2. ติดตั้ง Dependencies
-เปิด Terminal หรือ CMD ในโฟลเดอร์โปรเจกต์แล้วรัน:
+## 2. อัปเดตระบบและติดตั้ง Git
+```bash
+sudo dnf update -y
+sudo dnf install -y git
+git clone [https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git](https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git)
+cd Steam-Hours-Boost-Multi-Account-By-Nozeed
+```
+### 3. ติดตั้ง Dependencies
 ```bash
 npm install steam-user steam-totp
 ```
@@ -54,23 +59,39 @@ npm install steam-user steam-totp
 * games: ใส่ AppID ของเกมที่ต้องการ (หาได้จาก SteamDB)
 * status: 1 = Online, 7 = Invisible (ซ่อนสถานะ)
 
+แก้ไขข้อมูลในไฟล์ accounts.json (แนะนำให้ใช้ vi หรือ nano บน Linux):
+```bash
+nano accounts.json
+```
+(กด Ctrl+O แล้ว Enter เพื่อบันทึก และ Ctrl+X เพื่อออก)
+
 ---
 
 ### วิธีการใช้งาน (Usage)
-**การรันปกติ**
+**1 การรันปกติ**
 ```bash
 node index.js
 ```
-**การรันบน VPS (24 ชั่วโมง) ด้วย PM2**
-ติดตั้ง PM2
+
+**2 การรันบน VPS (24 ชั่วโมง) ด้วย PM2**
+2.1 ติดตั้ง PM2
 ```bash
 npm install pm2 -g
 ```
-เริ่มรันบอท
+2.2 เริ่มรันบอท
 ```bash
 pm2 start index.js --name "steam-idle"
 ```
-ดูสถานะและรหัส Steam Guard (ถ้าต้องกรอก)
+2.3 ดูสถานะและรหัส Steam Guard (ถ้าต้องกรอก)
 ```bash
 pm2 logs steam-idle
+```
+2.4 ตั้งค่าให้รันอัตโนมัติเมื่อเปิดเครื่อง (Reboot)
+```bash
+pm2 startup
+pm2 save
+```
+2.5 Restart
+```bash
+pm2 restart steam-idle
 ```
