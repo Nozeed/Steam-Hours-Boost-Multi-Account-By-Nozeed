@@ -21,7 +21,7 @@
 * **Windows:** ดาวน์โหลดและติดตั้งจาก [nodejs.org](https://nodejs.org/) (แนะนำเวอร์ชัน LTS)
 * **Linux (AlmaLinux/CentOS):**
 ```bash
-curl -sL [https://rpm.nodesource.com/setup_20.x](https://rpm.nodesource.com/setup_20.x) | sudo bash -
+curl -sL https://rpm.nodesource.com/setup_20.x | sudo bash -
 sudo dnf install -y nodejs
 ```
 
