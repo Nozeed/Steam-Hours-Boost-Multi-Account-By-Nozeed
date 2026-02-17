@@ -1,0 +1,16 @@
+[
+  {
+    "username": "user_1",
+    "password": "password_1",
+    "shared_secret": "",
+    "games": [730, 440, 570],
+    "status": 1
+  },
+  {
+    "username": "user_2",
+    "password": "password_2",
+    "shared_secret": "",
+    "games": [730, 440, 570],
+    "status": 1
+  }
+]
