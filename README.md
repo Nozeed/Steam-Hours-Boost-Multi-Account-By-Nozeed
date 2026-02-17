@@ -20,10 +20,11 @@
 ### 1. ติดตั้ง Node.js
 * **Windows:** ดาวน์โหลดและติดตั้งจาก [nodejs.org](https://nodejs.org/) (แนะนำเวอร์ชัน LTS)
 * **Linux (AlmaLinux/CentOS):**
-    ```bash
-    curl -sL [https://rpm.nodesource.com/setup_20.x](https://rpm.nodesource.com/setup_20.x) | sudo bash -
-    sudo dnf install -y nodejs
-    ```
+```bash
+curl -sL [https://rpm.nodesource.com/setup_20.x](https://rpm.nodesource.com/setup_20.x) | sudo bash -
+sudo dnf install -y nodejs
+```
+
 ## 2. อัปเดตระบบและติดตั้ง Git
 ```bash
 sudo dnf update -y
@@ -31,10 +32,12 @@ sudo dnf install -y git
 git clone [https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git](https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git)
 cd Steam-Hours-Boost-Multi-Account-By-Nozeed
 ```
+
 ### 3. ติดตั้ง Dependencies
 ```bash
 npm install steam-user steam-totp
 ```
+
 ### ⚙️ การตั้งค่า (Configuration)
 แก้ไขข้อมูลในไฟล์ accounts.json ตามรูปแบบดังนี้:
 ```bash
@@ -68,12 +71,14 @@ nano accounts.json
 ---
 
 ### วิธีการใช้งาน (Usage)
+
 **1 การรันปกติ**
 ```bash
 node index.js
 ```
 
 **2 การรันบน VPS (24 ชั่วโมง) ด้วย PM2**
+
 2.1 ติดตั้ง PM2
 ```bash
 npm install pm2 -g
