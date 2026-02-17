@@ -29,7 +29,7 @@ sudo dnf install -y nodejs
 ```bash
 sudo dnf update -y
 sudo dnf install -y git
-git clone [https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git](https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git)
+git clone https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git
 cd Steam-Hours-Boost-Multi-Account-By-Nozeed
 ```
 
