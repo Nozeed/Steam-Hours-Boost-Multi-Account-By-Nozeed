@@ -47,7 +47,7 @@ git clone https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.gi
 cd Steam-Hours-Boost-Multi-Account-By-Nozeed
 ```
 
-### 3. ติดตั้ง Dependencies
+### ติดตั้ง Dependencies
 ```bash
 npm install
 # หรือเฉพาะ package ที่จำเป็น (ตาม package.json เดิม)
