@@ -55,7 +55,7 @@ npm install steam-user steam-totp
 ```
 
 ### ⚙️ การตั้งค่า (Configuration)
-แก้ไขข้อมูลในไฟล์ accounts.json ใช้ VS Code / notepad ตามรูปแบบดังนี้:
+แก้ไขข้อมูลในไฟล์ accounts.json ใช้ VS Code / notepad ถ้าใช้บน Windows :
 ```bash
 [
   {
@@ -78,7 +78,7 @@ npm install steam-user steam-totp
 * games: ใส่ AppID ของเกมที่ต้องการ (หาได้จาก SteamDB)
 * status: 1 = Online, 7 = Invisible (ซ่อนสถานะ)
 
-แก้ไขข้อมูลในไฟล์ accounts.json (แนะนำให้ใช้ vi หรือ nano บน Linux):
+แก้ไขข้อมูลในไฟล์ accounts.json (แนะนำให้ใช้ vi หรือ nano ถ้าใช้บน Linux):
 ```bash
 nano accounts.json
 ```
