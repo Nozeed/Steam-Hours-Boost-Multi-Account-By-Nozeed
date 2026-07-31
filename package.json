@@ -1,0 +1,40 @@
+{
+  "name": "steam-hours-boost-multi-account",
+  "version": "1.1.0",
+  "description": "สคริปต์ Node.js สำหรับดันชั่วโมงเกม Steam หลายบัญชีพร้อมกัน มีระบบหน่วงเวลาและรองรับ Steam Guard อัตโนมัติ/手动",
+  "main": "index.js",
+  "private": true,
+  "author": "Nozeed",
+  "license": "MIT",
+  "keywords": [
+    "steam",
+    "steam-idle",
+    "steam-boost",
+    "hours-boost",
+    "multi-account",
+    "steam-farming",
+    "node-steam"
+  ],
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "steam-user": "^5.2.0",
+    "steam-totp": "^2.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed/issues"
+  },
+  "homepage": "https://github.com/Nozeed/Steam-Hours-Boost-Multi-Account-By-Nozeed#readme"
+}
