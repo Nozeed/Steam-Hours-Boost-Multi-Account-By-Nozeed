@@ -32,14 +32,14 @@ module.exports = {
       username: "your_username_1",
       password: "your_password_1",
       shared_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // ใส่ถ้ามี
-      games: [730, 440, 570], // AppID เกมที่อยาก boost
+      games: ["Boost By Nozeed", 730, 440, 570], // AppID เกมที่อยาก boost
       status: 1, // optional: 1=Online, 7=Invisible
     },
     {
       username: "your_username_1",
       password: "your_password_2",
       shared_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // ใส่ถ้ามี
-      games: [730, 440, 570], // AppID เกมที่อยาก boost
+      games: ["Boost By Nozeed", 730, 440, 570], // AppID เกมที่อยาก boost
       status: 1, // optional: 1=Online, 7=Invisible
     },
 
