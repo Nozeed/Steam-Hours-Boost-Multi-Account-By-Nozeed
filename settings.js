@@ -5,13 +5,13 @@ module.exports = {
   //               Webhook Discord
   // ────────────────────────────────────────────────
   WEBHOOK_URL:
-    "https://discordapp.com/api/webhooks/1476072101898358815/uPqaZ59sAxuHb0_r_wxQ4ps19O8ta9dk7LlNTKFXPz28NTYoi8tksLfnOZ10szLYnzAT",
+    "https://discordapp.com/api/webhooks/xxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 
   // ────────────────────────────────────────────────
   //          การหน่วงเวลาเริ่มต้นบัญชี (milliseconds)
   // ────────────────────────────────────────────────
-  MIN_START_DELAY_MS: 12000, // 15 วินาที (แนะนำอย่าต่ำกว่านี้มาก)
-  MAX_START_DELAY_MS: 20000, // 30 วินาที
+  MIN_START_DELAY_MS: 15000, // 15 วินาที (แนะนำอย่าต่ำกว่านี้มาก)
+  MAX_START_DELAY_MS: 30000, // 30 วินาที
 
   // ────────────────────────────────────────────────
   //       การลองใหม่เมื่อ logged elsewhere
