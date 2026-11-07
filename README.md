@@ -433,6 +433,87 @@ sudo journalctl -u steam-boost -f
 
 ---
 
+## 🔎 เช็คสถานะบัญชี (ใช้กับ PM2 ได้)
+
+ตัวโปรแกรมจะเขียนไฟล์ `status.json` อัตโนมัติทุกครั้งที่สถานะเปลี่ยน และ heartbeat ทุก 30 วินาที
+จึงเช็คได้ทันทีว่าบัญชีไหนออนไลน์/ออฟไลน์ โดยไม่ต้องไล่อ่าน log
+
+> **หมายเหตุ:** `status.js` **ไม่ได้ถูกเรียกจาก `index.js` โดยตรง** — เป็นสคริปต์แยกที่อ่าน `status.json`
+> จึงต้องรัน `npm start` (หรือ `pm2 start ecosystem.config.js`) อย่างน้อยหนึ่งครั้งก่อน ไฟล์สถานะจึงจะถูกสร้าง
+> ถ้ายังไม่เคยรัน คำสั่ง `npm run status` จะแสดง `ยังไม่มีไฟล์สถานะ (status.json)`
+
+### ดูสถานะแบบสรุป
+
+```bash
+npm run status
+```
+
+ตัวอย่างผลลัพธ์:
+
+```text
+Steam Boost Status
+──────────────────────────────────────────────────────────────
+PID: 12345 (running)
+Started: 2026-11-06 21:30:00
+Updated: 2026-11-06 21:35:12 (3 วินาทีที่แล้ว)
+──────────────────────────────────────────────────────────────
+#   บัญชี            สถานะ                          เกม   อัปเดต                 หมายเหตุ
+#1  use***er        🟢 ออนไลน์                     6     2026-11-06 21:35:10   ล็อกอินสำเร็จ
+#2  abc***ne        🔴 error                       2     2026-11-06 21:34:50   รหัสผ่านไม่ถูกต้อง
+#3  xyz***wo        🟠 รอ retry                    3     2026-11-06 21:35:00   retry: 2026-11-06 22:05:00
+──────────────────────────────────────────────────────────────
+สรุป: ออนไลน์ 1 / 3 | ออฟไลน์ 2
+```
+
+### ใช้ในสคริปต์ / monitoring
+
+```bash
+npm run status:check
+```
+
+คำสั่งนี้จะ exit code `1` ถ้ามีบัญชีออฟไลน์อย่างน้อย 1 บัญชี
+เหมาะกับ cron, Uptime Kuma, หรือ health check
+
+> **ข้อจำกัดปัจจุบัน:** `status:check` ตรวจเฉพาะสถานะรายบัญชี ยัง**ไม่ตรวจว่า process ยังมีชีวิตหรือไฟล์สถานะ stale**
+> ถ้า process ตายแต่ snapshot ล่าสุดยังเป็น `online` คำสั่งนี้อาจคืน exit `0` (ดูหัวข้อ [ข้อจำกัดที่ทราบ](#-ข้อจำกัดที่ทราบ-known-issues))
+> ในการทำ monitoring ควรเช็คบรรทัด `PID: ... (ไม่พบ process)` และเวลา `Updated` ประกอบด้วย
+
+### ดู log แบบ realtime
+
+```bash
+pm2 logs steam-boost
+```
+
+### คำสั่ง PM2 ที่เกี่ยวข้อง
+
+| คำสั่ง | ใช้ดูอะไร |
+|---|---|
+| `pm2 list` | process ยังรันอยู่ไหม (ไม่บอกสถานะรายบัญชี) |
+| `pm2 describe steam-boost` | PID, uptime, restart count, path |
+| `pm2 monit` | CPU / RAM แบบ realtime |
+| `pm2 logs steam-boost` | log การ login/หลุด/error |
+| `npm run status` | สถานะรายบัญชีจาก `status.json` |
+
+> `status.json` ถูกใส่ใน `.gitignore` แล้ว ไม่ถูกอัพขึ้น GitHub
+> ถ้าไฟล์เก่าเกิน 90 วินาที หรือ PID ไม่ตรงกับ process ที่รันอยู่ คำสั่ง status จะเตือนให้
+
+### ความหมายของสถานะ
+
+| สถานะ | ความหมาย |
+|---|---|
+| `🟢 online` | ออนไลน์และกำลัง boost อยู่ |
+| `🟡 online_blocked` | ออนไลน์แต่หยุด idle ชั่วคราว เพราะมีเซสชันอื่นเล่นเกม |
+| `🔑 logging_in` | กำลังล็อกอิน |
+| `🔑 waiting_steam_guard` | รอ Steam Guard code |
+| `🟠 waiting_retry` | รอรอบ retry ตามเวลาที่กำหนด |
+| `🟠 logged_elsewhere` | บัญชีถูกใช้งานจากที่อื่น |
+| `🟠 reconnecting` | หลุดการเชื่อมต่อ กำลังเชื่อมต่อใหม่ |
+| `🔄 rebooting` | กำลัง logOff → logOn ใหม่ตามรอบ |
+| `🔴 error` | เกิดข้อผิดพลาด (ดูหมายเหตุ) |
+| `⚪ stopped` | หยุดแล้ว |
+
+---
+
 ## 🧠 พฤติกรรมของระบบ
 
 | สถานการณ์ | สิ่งที่ระบบทำ |
@@ -456,9 +537,29 @@ sudo journalctl -u steam-boost -f
 | `npm start` | เริ่มระบบ |
 | `npm run dev` | เริ่มแบบ watch ด้วย nodemon |
 | `npm run dry-run` | ตรวจ settings โดยไม่เชื่อมต่อ Steam |
+| `npm run status` | ดูสถานะรายบัญชีจาก `status.json` |
+| `npm run status:check` | เหมือน status แต่ exit code 1 ถ้ามีบัญชีออฟไลน์ |
 | `npm run check` | ตรวจ syntax ของไฟล์ JS |
 | `npm run pm2:start` | เริ่มผ่าน PM2 |
 | `npm run pm2:logs` | ดู log PM2 |
+
+---
+
+## 🐞 ข้อจำกัดที่ทราบ (Known Issues)
+
+> ส่วนนี้รวบรวมข้อจำกัด/บัคที่ตรวจพบในเวอร์ชันปัจจุบัน เพื่อให้ผู้ใช้หลีกเลี่ยงหรือรอการแก้ไขในเวอร์ชันถัดไป
+
+| อาการ | สาเหตุ / ผลกระทบ | ทางแก้ชั่วคราว |
+|---|---|---|
+| ขึ้น `บัญชีไม่ถูกต้อง` ทั้งที่เน็ตหลุด | แปล `EResult` ผิดใน `getErrorMessage()`: code `3` คือ `NoConnection`, `106` คือ `GSLTExpired`, `0` คือ `Invalid` | ดู error code ใน log ประกอบก่อนแก้ข้อมูลบัญชี |
+| `npm run status:check` คืน exit `0` ทั้งที่โปรแกรมตาย | ตรวจแค่บัญชี offline ไม่ตรวจ PID/ไฟล์ stale | เช็คบรรทัด `PID: ... (ไม่พบ process)` และเวลา `Updated` เอง |
+| `status.js` ขึ้น `อ่าน status.json ไม่สำเร็จ` | ไฟล์มี BOM / ถูกเขียนไม่ครบ / เสียหาย | ลบ `status.json` แล้วรัน `npm start` ใหม่ |
+| `shared_secret` ผิดติดกันเกิน 3 ครั้ง แล้วบัญชีหยุดถาวร | ไม่มี retry หลังหยุด และตัวนับไม่รีเซ็ตตอน login สำเร็จ | แก้ `shared_secret` ให้ถูกแล้ว restart process |
+| PM2 `stop`/`restart` แล้ว logOff ไม่ทัน | PM2 `kill_timeout` (1600 ms) สั้นกว่า `SHUTDOWN_GRACE_MS` (2000 ms) | เพิ่ม `kill_timeout: 5000` ใน `ecosystem.config.js` |
+| หลัง `uncaughtException` โปรแกรมค้างและ PM2 ไม่ restart | handler แค่ log/แจ้ง Discord แต่ไม่ exit | restart process เอง หรือรอแก้ไข |
+| กด `Ctrl + C` ระหว่างหน่วงเริ่มบัญชี 15–30 วิ แล้วสถานะค้าง `starting` | loop เริ่มบัญชีไม่เช็ค `shuttingDown` | รอ process ปิดแล้วเริ่มระบบใหม่ |
+| ลืมใส่ `games` แล้วบัญชีถูกข้าม | `games` ต้องเป็น array; ถ้าไม่ใส่จะถูก skip | ใส่ `games: []` ถ้าต้องการแค่ออนไลน์ |
+| คอลัมน์ตาราง `npm run status` เหลื่อม | นับความกว้างตัวอักษรไทยไม่ตรงกับที่แสดงผล | อ่านค่าจากแต่ละคอลัมน์ ไม่ต้องยึดตำแหน่ง |
 
 ---
 
@@ -476,6 +577,8 @@ sudo journalctl -u steam-boost -f
 | PowerShell รัน `npm` ไม่ได้ | ใช้ `npm.cmd` หรือเปิด terminal ใหม่หลังติดตั้ง Node.js |
 | Node เวอร์ชันเก่า | อัปเดตเป็น Node 20/22 ตามหัวข้อติดตั้ง |
 | `npm audit` แจ้ง vulnerabilities | เป็น dependency ทางอ้อมของ `steam-user`; ตรวจด้วย `npm audit` และอย่ารัน `npm audit fix --force` โดยไม่ตรวจสอบ |
+| `ยังไม่มีไฟล์สถานะ (status.json)` | ยังไม่เคยรัน `npm start` / ยังไม่ได้สร้าง `settings.js` — ต้องรันตัวโปรแกรมก่อนแล้วจึงเรียก `npm run status` |
+| `อ่าน status.json ไม่สำเร็จ` | ไฟล์มี BOM, ถูกแก้มือ, เสียหาย หรือกำลังถูกเขียนอยู่ — ลบ `status.json` แล้วเริ่มระบบใหม่ |
 
 ### ดู log
 
@@ -505,6 +608,8 @@ sudo journalctl -u steam-boost -f
 ```text
 .
 ├── index.js               # logic หลัก
+├── status.js              # อ่านสถานะรายบัญชี (npm run status)
+├── status.json            # สถานะที่เขียนตอนรัน (gitignored, สร้างอัตโนมัติ)
 ├── settings.js            # ข้อมูลบัญชี + ค่าตั้ง (gitignored)
 ├── settings.example.js    # ตัวอย่าง settings
 ├── .env                   # webhook / secrets (gitignored)
